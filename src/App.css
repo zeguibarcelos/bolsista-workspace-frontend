@@ -1,0 +1,101 @@
+/* Estilos básicos para o calendário */
+.react-calendar {
+  width: 100%; /* Define a largura do calendário para preencher todo o seu contêiner */
+  height: 100%; /* max-width: 700px; Define a largura máxima do calendário para limitá-lo em telas maiores */
+  margin: 0 auto; /* Centraliza o calendário horizontalmente no seu contêiner */
+  background-color: #fff; /* Define a cor de fundo do calendário */
+  font-family: Arial, sans-serif; /* Define a fonte do texto do calendário */
+  font-size: 14px; /* Define o tamanho da fonte do texto do calendário */
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  
+}
+
+
+
+/* Estilos para o cabeçalho do calendário */
+.react-calendar__navigation {
+  display: flex; /* Define o cabeçalho como um elemento flexível */
+  justify-content: space-between; /* Alinha os elementos do cabeçalho nas extremidades opostas */
+  align-items: center; /* Centraliza os elementos verticalmente no cabeçalho */
+  padding: 10px; /* Adiciona preenchimento interno ao cabeçalho */
+  background-color: #000; /* Define a cor de fundo do cabeçalho */
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+.react-calendar__navigation__label {
+  font-weight: bold; /* Define a fonte em negrito para a etiqueta do cabeçalho */
+  color: #fff; /* Define a cor do texto do cabeçalho */
+  border: none;
+  background-color: transparent;
+  cursor: pointer; /* Define o cursor do mouse como um indicador de link ao passar o mouse sobre as setas */
+}
+
+.react-calendar__navigation__label::first-letter {
+  text-transform: uppercase;
+}
+
+.react-calendar__navigation__arrow {
+  font-size: 24px; /* Define o tamanho do ícone de seta do cabeçalho */
+  color: #fff; /* Define a cor do ícone de seta do cabeçalho */
+  border: none;
+  background-color: transparent;
+  cursor: pointer; /* Define o cursor do mouse como um indicador de link ao passar o mouse sobre as setas */
+}
+
+
+/* Estilos para os dias do calendário */
+.react-calendar__month-view__days {
+  display: grid; /* Define os dias como um grid */
+  grid-template-columns: repeat(7, 1fr); /* Define 7 colunas iguais */
+  margin-top: 10px; /* Adiciona um espaço superior aos dias para separá-los do cabeçalho */
+}
+
+
+
+.react-calendar__tile {
+  cursor: pointer; /* Define o cursor do mouse como um indicador de link ao passar o mouse sobre as setas */
+  border: 1px solid rgb(243, 243, 243);
+  background-color: white;
+  min-height: 15vh;
+}
+
+.react-calendar__tile:hover {
+  border: 1px solid #0AB7C7;
+}
+
+.react-calendar__tile > .task-button {
+  display: none;
+}
+
+.react-calendar__tile:hover > .task-button {
+  display: block;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  text-align: left; /* Centraliza o texto dos dias */
+  color: #333; /* Define a cor do texto dos dias */
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+.react-calendar__tile--now {
+  background-color: rgb(36, 36, 36); /* Define a cor de fundo do dia atual */
+  color: #fff; /* Define a cor do texto do dia atual */
+}
+
+.react-calendar__tile--now .event-icon {
+  color: white
+}
+
+.react-calendar__tile--active {
+  border: 1px solid rgb(36, 36, 36);
+}
+
+
+.react-calendar__tile--inactive {
+  color: lightgrey;
+}
