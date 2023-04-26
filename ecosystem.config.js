@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
       {
-        name: 'my-react-app',
+        name: 'my-app',
         script: 'npm',
         args: 'start',
         instances: 1,
@@ -9,9 +9,9 @@ module.exports = {
         watch: false,
         max_memory_restart: '1G',
         env: {
-          NODE_ENV: 'production'
+          PORT: 80
         }
       }
     ]
-  }
+  };
   
