@@ -6,6 +6,6 @@ export interface Localidade {
   
   export interface Componente {
     descricao: string
-    id_componente: number
+    id_componente?: number
   }
   

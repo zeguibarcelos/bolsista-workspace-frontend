@@ -12,8 +12,8 @@ export const Theme = createTheme({
       contrastText: "#ffffff",
     },
     secondary: {
-      main: cyan[500],
-      dark: cyan[400],
+      main: "#242424",
+      dark: "#131313",
       light: cyan[300],
 
       contrastText: "#ffffff",
@@ -22,7 +22,6 @@ export const Theme = createTheme({
       default: "#F1F1F1",
       paper: "#FFFFFF",
     },
-    
   },
 
   typography: {

@@ -1,10 +1,7 @@
 import {
   Box,
   Button,
-  Dialog,
-  DialogTitle,
   Drawer,
-  FormControl,
   Grid,
   InputLabel,
   MenuItem,
@@ -16,11 +13,7 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import EventIcon from "@mui/icons-material/Event";
-import {
-  DatePicker,
-  DateTimePicker,
-  LocalizationProvider,
-} from "@mui/x-date-pickers";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { getAllEventos } from "../services/Evento/getAllEventos";
@@ -40,16 +33,21 @@ dayjs.extend(timezone);
 dayjs.locale("pt-br");
 
 const Calendario = () => {
+  document.title = "Calendário";
+
   const [eventos, setEventos] = useState<Evento[]>([]);
 
-  useEffect(() => {
+  const getEventos = () => {
     getAllEventos().then((eventos) => setEventos(eventos));
+  };
+  useEffect(() => {
+    getEventos();
   }, []);
 
   const tileContent = ({ date }: any) => {
     const eventosForDate = eventos.filter(
       (task) =>
-        new Date(task.data_hora_inicio).getDate() ===
+        new Date(task.data_hora_inicio).getDate() - 1 ===
           new Date(formatDate(date)).getDate() &&
         new Date(task.data_hora_inicio).getMonth() ===
           new Date(formatDate(date)).getMonth() &&
@@ -72,7 +70,7 @@ const Calendario = () => {
                   task.prioridade === "Rotina"
                     ? "5px solid #296ED6"
                     : task.prioridade === "Importante"
-                    ? "5px solid #31D629"
+                    ? "5px solid #D69C29"
                     : "5px solid #D63929",
               }}
               href={`evento/${task?.id_evento}`}
@@ -141,6 +139,7 @@ const Calendario = () => {
     if (date) {
       const lDate = new Date(date);
       const today = new Date();
+      console.log(lDate, today);
       return (
         lDate.getDay() === today.getDay() &&
         lDate.getMonth() === today.getMonth() &&
@@ -159,10 +158,13 @@ const Calendario = () => {
         : new Date(),
       data_hora_fim: selectedEndDate ? new Date(selectedEndDate) : new Date(),
       descricao: description,
-      status: "Em Andamento",
+      status: "Agendado",
       prioridade: priority,
       tarefas: [],
       tipo: type,
+    }).then(() => {
+      getEventos();
+      setEventDrawerOpen(false);
     });
   };
 

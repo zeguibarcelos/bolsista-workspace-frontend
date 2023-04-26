@@ -1,6 +1,5 @@
 import {
   Box,
-  Drawer,
   IconButton,
   ListItemButton,
   ListItemIcon,
@@ -11,11 +10,12 @@ import {
 } from "@mui/material";
 import { ReactElement, useState } from "react";
 import { useNavigate, useResolvedPath, useMatch } from "react-router-dom";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Theme } from "../themes/Theme";
 import MenuIcon from "@mui/icons-material/Menu";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+
 interface IListItemProps {
   to: string;
   icon: ReactElement;
@@ -126,10 +126,10 @@ const Menu = ({ children }: any) => {
               onClick={() => {}}
             />
             <ListItemLink
-              icon={<AccountCircleIcon sx={{ color: "white" }} />}
+              icon={<AdminPanelSettingsIcon sx={{ color: "white" }} />}
               isDrawerOpen={opened}
-              to="/perfil"
-              label="Perfil"
+              to="/adm"
+              label="Administração"
               onClick={() => {}}
             />
           </Box>

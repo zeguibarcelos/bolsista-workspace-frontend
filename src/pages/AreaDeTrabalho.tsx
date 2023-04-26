@@ -5,8 +5,10 @@ import { Theme } from "../themes/Theme";
 import { getAllEventos } from "../services/Evento/getAllEventos";
 import { Evento } from "../services/Evento";
 import { getAllTarefas } from "../services/Tarefa/getAllTarefas";
+import Title from "../components/Title";
 
 const AreaDeTrabalho = () => {
+  document.title = "Inicio";
   const [nome, setNome] = useState("Usuário");
   const [dataAtual, setDataAtual] = useState(new Date());
 
@@ -22,6 +24,21 @@ const AreaDeTrabalho = () => {
       field: "descricao",
       headerName: "Descrição",
       flex: 1,
+    },
+    {
+      field: "acao",
+      headerName: "Ação",
+      width: 120,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          href={`evento/${params.row.id}`}
+        >
+          Ir
+        </Button>
+      ),
     },
   ];
   const columnsTarefas: GridColDef[] = [
@@ -58,6 +75,7 @@ const AreaDeTrabalho = () => {
   const theme = Theme;
 
   const [eventos, setEventos] = useState<any[]>([]);
+
   const [tarefas, setTarefas] = useState<any[]>([]);
 
   useEffect(() => {
@@ -71,7 +89,7 @@ const AreaDeTrabalho = () => {
             id: tarefa.id_tarefa,
             status: tarefa.status,
             descricao: tarefa.descricao,
-            id_evento: tarefa.evento,
+            id_evento: tarefa.eventoIdEvento,
           };
         })
       );
@@ -121,26 +139,6 @@ const AreaDeTrabalho = () => {
       );
     });
   }, []);
-
-  const Title = (props: { titulo: string }) => {
-    return (
-      <Box
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          borderTopRightRadius: "4px",
-          borderTopLeftRadius: "4px",
-          backgroundColor: "#000",
-        }}
-      >
-        <Typography variant="h6" color="white" style={{ margin: 0 }}>
-          {props.titulo}
-        </Typography>
-      </Box>
-    );
-  };
 
   return (
     <Box

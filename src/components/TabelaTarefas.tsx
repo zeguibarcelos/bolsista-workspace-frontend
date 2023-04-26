@@ -19,7 +19,7 @@ import { createTarefa } from "../services/Tarefa/createTarefa";
 import { Tecnico } from "../services/Tecnico";
 import { getAllTecnicos } from "../services/Tecnico/getAllTecnicos";
 import { Localidade } from "../services/Localidade";
-import { getAllLocalidades } from "../services/Localidade/getAllEventos";
+import { getAllLocalidades } from "../services/Localidade/getAllLocalidades";
 import { updateTarefa } from "../services/Tarefa/updateTarefa";
 
 interface ITabelaTarefasProps {
@@ -52,7 +52,7 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({ id_evento }) => {
   const handleAddTarefa = () => {
     createTarefa({
       descricao: descricao,
-      evento: id_evento,
+      eventoIdEvento: id_evento,
       status: status,
       tecnicos:
         typeof selectedTecnicos === "string"
@@ -84,7 +84,7 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({ id_evento }) => {
     updateTarefa({
       id_tarefa: tarefa.id_tarefa,
       descricao: tarefa.descricao,
-      evento: tarefa.evento,
+      eventoIdEvento: tarefa.eventoIdEvento,
       status: "Concluída",
     }).then(() => getTarefas());
   };
@@ -145,6 +145,7 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({ id_evento }) => {
               <TextField
                 value={descricao}
                 onChange={(e) => setDescricao(e.target.value)}
+                fullWidth
               />
             </TableCell>
             <TableCell>
@@ -154,12 +155,13 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({ id_evento }) => {
                 onChange={(e) => setStatus(e.target.value as string)}
                 disabled
               >
-                <MenuItem value="Em andamento">A fazer</MenuItem>
+                <MenuItem value="Em Andamento">A fazer</MenuItem>
               </Select>
             </TableCell>
 
             <TableCell>
               <Select
+                fullWidth
                 label="localidade"
                 value={selectedLocalidade}
                 onChange={(e) => setSelectedLocalidade(e.target.value)}
@@ -175,6 +177,7 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({ id_evento }) => {
             </TableCell>
             <TableCell>
               <Select
+                fullWidth
                 multiple
                 label="componente"
                 value={componentes}
@@ -195,6 +198,7 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({ id_evento }) => {
             </TableCell>
             <TableCell>
               <Select
+                fullWidth
                 multiple
                 label="Tecnico"
                 value={selectedTecnicos}

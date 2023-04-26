@@ -5,7 +5,7 @@ export interface Tarefa {
   id_tarefa?: number;
   descricao: string;
   status: string;
-  evento: number;
+  eventoIdEvento: number;
   tecnicos?: Tecnico[];
   componentes?: any[]
 }

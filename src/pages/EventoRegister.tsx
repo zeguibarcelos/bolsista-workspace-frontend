@@ -1,34 +1,22 @@
-import {
-  Grid,
-  TextField,
-  Button,
-  Box,
-  Typography,
-  IconButton,
-} from "@mui/material";
-import axios from "axios";
+import { Grid, TextField, Button, Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getEventoById } from "../services/Evento/getEventoById";
 import TabelaTarefas from "../components/TabelaTarefas";
-import { getTarefaByEventoId } from "../services/Tarefa/getTarefaByEventoId";
-import { Evento } from "../services/Evento";
 import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
 import { updateEvento } from "../services/Evento/updateEvento";
 import { Theme } from "../themes/Theme";
+import { Tarefa } from "../services/Tarefa";
+import { getTarefaByEventoId } from "../services/Tarefa/getTarefaByEventoId";
 
 const EventoRegister = () => {
+  document.title = "Evento";
+
   const { id } = useParams<{ id: string }>();
 
   const [disabled, setDisabled] = useState<boolean>(true);
-
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState<string[]>([]);
-  const [priority, setPriority] = useState("");
-  const [type, setType] = useState("");
-  const [status, setStatus] = useState("");
 
   const [evento, setEvento] = useState<any>({
     prioridade: "",
@@ -60,8 +48,14 @@ const EventoRegister = () => {
   };
 
   const handleConcluir = () => {
-    updateEvento({ ...evento, status: "Concluído" }).then(() => {
-      getEvento();
+    getTarefaByEventoId(Number(id)).then((tasks) => {
+      if (tasks.some((tarefa: Tarefa) => tarefa.status === "Em Andamento")) {
+        alert("Conclua todas as Tarefas antes de concluir o Evento!");
+      } else {
+        updateEvento({ ...evento, status: "Concluído" }).then(() => {
+          getEvento();
+        });
+      }
     });
   };
 
@@ -112,7 +106,7 @@ const EventoRegister = () => {
               )}
 
               <Button onClick={handleConcluir} startIcon={<CheckIcon />}>
-                Concluir
+                Concluir Evento
               </Button>
             </>
           )}
@@ -127,7 +121,7 @@ const EventoRegister = () => {
             onChange={handleTextFieldChange}
             fullWidth
             required
-            disabled={disabled}
+            disabled
           />
         </Grid>
         <Grid item xs={6}>
@@ -138,7 +132,7 @@ const EventoRegister = () => {
             onChange={handleTextFieldChange}
             fullWidth
             required
-            disabled={disabled}
+            disabled
           />
         </Grid>
         <Grid item xs={6}>
@@ -171,7 +165,7 @@ const EventoRegister = () => {
             onChange={handleTextFieldChange}
             fullWidth
             required
-            disabled={disabled}
+            disabled
           />
         </Grid>
         <Grid item xs={6}>
@@ -182,7 +176,7 @@ const EventoRegister = () => {
             onChange={handleTextFieldChange}
             fullWidth
             required
-            disabled={disabled}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>

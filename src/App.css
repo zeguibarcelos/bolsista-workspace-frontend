@@ -19,7 +19,7 @@
   justify-content: space-between; /* Alinha os elementos do cabeçalho nas extremidades opostas */
   align-items: center; /* Centraliza os elementos verticalmente no cabeçalho */
   padding: 10px; /* Adiciona preenchimento interno ao cabeçalho */
-  background-color: #000; /* Define a cor de fundo do cabeçalho */
+  background-color: rgb(36, 36, 36); /* Define a cor de fundo do cabeçalho */
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
 }
