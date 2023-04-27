@@ -151,21 +151,31 @@ const Calendario = () => {
   }
 
   const addEvento = () => {
-    createEvento({
-      categoria: category.join(),
-      data_hora_inicio: selectedStartDate
-        ? new Date(selectedStartDate)
-        : new Date(),
-      data_hora_fim: selectedEndDate ? new Date(selectedEndDate) : new Date(),
-      descricao: description,
-      status: "Agendado",
-      prioridade: priority,
-      tarefas: [],
-      tipo: type,
-    }).then(() => {
-      getEventos();
-      setEventDrawerOpen(false);
-    });
+    if (
+      !category.length ||
+      !selectedStartDate ||
+      description === "" ||
+      priority === "" ||
+      type === ""
+    ) {
+      alert("Preencha todos os campos!");
+    } else {
+      createEvento({
+        categoria: category.join(", "),
+        data_hora_inicio: selectedStartDate
+          ? new Date(selectedStartDate)
+          : new Date(),
+        data_hora_fim: selectedEndDate ? new Date(selectedEndDate) : new Date(),
+        descricao: description,
+        status: "Agendado",
+        prioridade: priority,
+        tarefas: [],
+        tipo: type,
+      }).then(() => {
+        getEventos();
+        setEventDrawerOpen(false);
+      });
+    }
   };
 
   return (

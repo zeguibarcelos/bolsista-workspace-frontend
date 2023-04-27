@@ -76,13 +76,16 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({
     }).then(() => {
       getTarefas();
       if (evento.status === "Agendado") {
+        const dataInicio = new Date();
         setEvento({
           ...evento,
           status: "Em Andamento",
+          data_hora_inicio: dataInicio,
         });
         updateEvento({
           ...evento,
           status: "Em Andamento",
+          data_hora_inicio: dataInicio,
         });
       }
     });
@@ -147,7 +150,6 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({
                 {tarefa.tecnicos?.map((tecnico) => tecnico.nome).join(", ")}
               </TableCell>
               <TableCell>
-                {" "}
                 {tarefa.status !== "Concluída" && (
                   <Button
                     variant="contained"
@@ -233,9 +235,11 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({
               </Select>
             </TableCell>
             <TableCell>
-              <Button variant="contained" onClick={handleAddTarefa}>
-                Adicionar tarefa
-              </Button>
+              {evento.status !== "Concluido" && (
+                <Button variant="contained" onClick={handleAddTarefa}>
+                  Adicionar tarefa
+                </Button>
+              )}
             </TableCell>
           </TableRow>
         </TableBody>

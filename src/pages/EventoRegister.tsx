@@ -52,7 +52,11 @@ const EventoRegister = () => {
       if (tasks.some((tarefa: Tarefa) => tarefa.status === "Em Andamento")) {
         alert("Conclua todas as Tarefas antes de concluir o Evento!");
       } else {
-        updateEvento({ ...evento, status: "Concluído" }).then(() => {
+        updateEvento({
+          ...evento,
+          status: "Concluído",
+          data_hora_fim: new Date(),
+        }).then(() => {
           getEvento();
         });
       }
