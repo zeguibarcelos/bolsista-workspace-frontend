@@ -21,15 +21,21 @@ import { getAllTecnicos } from "../services/Tecnico/getAllTecnicos";
 import { Localidade } from "../services/Localidade";
 import { getAllLocalidades } from "../services/Localidade/getAllLocalidades";
 import { updateTarefa } from "../services/Tarefa/updateTarefa";
+import { Evento } from "../services/Evento";
+import { updateEvento } from "../services/Evento/updateEvento";
 
 interface ITabelaTarefasProps {
-  id_evento: number;
+  evento: Evento;
+  setEvento: (evento: Evento) => void;
 }
 
-const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({ id_evento }) => {
+const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({
+  evento,
+  setEvento,
+}) => {
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
   const [descricao, setDescricao] = useState("");
-  const [status, setStatus] = useState("Em andamento");
+  const [status, setStatus] = useState("Em Andamento");
   const [selectedTecnicos, setSelectedTecnicos] = useState<string[] | string>(
     []
   );
@@ -52,8 +58,8 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({ id_evento }) => {
   const handleAddTarefa = () => {
     createTarefa({
       descricao: descricao,
-      eventoIdEvento: id_evento,
-      status: status,
+      evento: { id_evento: evento.id_evento },
+      status: "Em Andamento",
       tecnicos:
         typeof selectedTecnicos === "string"
           ? [{ matricula: Number(selectedTecnicos) }]
@@ -67,17 +73,30 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({ id_evento }) => {
           : componentes.map((selected) => {
               return { id_componente: Number(selected) };
             }),
-    }).then(() => getTarefas());
+    }).then(() => {
+      getTarefas();
+      if (evento.status === "Agendado") {
+        setEvento({
+          ...evento,
+          status: "Em Andamento",
+        });
+        updateEvento({
+          ...evento,
+          status: "Em Andamento",
+        });
+      }
+    });
   };
 
   useEffect(() => {
     getTarefas();
-  }, []);
+  }, [evento]);
 
   function getTarefas() {
-    getTarefaByEventoId(id_evento).then((task) => {
-      setTarefas(task);
-    });
+    evento.id_evento &&
+      getTarefaByEventoId(evento.id_evento).then((task) => {
+        setTarefas(task);
+      });
   }
 
   const handleUpdateTarefa = (tarefa: Tarefa) => {

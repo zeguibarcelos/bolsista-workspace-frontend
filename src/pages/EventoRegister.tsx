@@ -191,7 +191,7 @@ const EventoRegister = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <TabelaTarefas id_evento={Number(id)} />
+          <TabelaTarefas evento={evento} setEvento={setEvento} />
         </Grid>
       </Grid>
     </Box>

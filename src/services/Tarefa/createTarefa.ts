@@ -3,7 +3,7 @@ import Api from "..";
 
   
 
-export const createTarefa = async (tarefa: Tarefa): Promise<Tarefa> => {
+export const createTarefa = async (tarefa: any): Promise<Tarefa> => {
     try {
       const { data } = await Api.post<Tarefa>(`tarefa`, tarefa);
       return data;

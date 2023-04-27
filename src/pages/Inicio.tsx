@@ -1,25 +1,25 @@
-import { Typography, Paper, Box, Grid, Button } from "@mui/material";
-import { GridColDef, GridValueGetterParams, DataGrid } from "@mui/x-data-grid";
+import { Typography, Paper, Box, Button } from "@mui/material";
+import { GridColDef, DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { Theme } from "../themes/Theme";
 import { getAllEventos } from "../services/Evento/getAllEventos";
-import { Evento } from "../services/Evento";
 import { getAllTarefas } from "../services/Tarefa/getAllTarefas";
 import Title from "../components/Title";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { countAll } from "../services/Tarefa/countAll";
 
-const AreaDeTrabalho = () => {
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+const Inicio = () => {
   document.title = "Inicio";
   const [nome, setNome] = useState("Usuário");
   const [dataAtual, setDataAtual] = useState(new Date());
 
-  const handleNomeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNome(event.target.value);
-  };
-
   const columnsEventos: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 100 },
+    { field: "id", headerName: "ID", width: 75 },
     { field: "data_hora_inicio", headerName: "Data", width: 150 },
-    { field: "prioridade", headerName: "Prioridade", width: 150 },
+    { field: "prioridade", headerName: "Prioridade", width: 100 },
     {
       field: "descricao",
       headerName: "Descrição",
@@ -42,14 +42,14 @@ const AreaDeTrabalho = () => {
     },
   ];
   const columnsTarefas: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 100 },
+    { field: "id", headerName: "ID", width: 75 },
     {
       field: "status",
       headerName: "Status",
       width: 150,
     },
-    { field: "descricao", headerName: "Descrição", width: 300 },
-    { field: "id_evento", headerName: "Id_Evento", width: 300 },
+    { field: "descricao", headerName: "Descrição", flex: 1 },
+    { field: "id_evento", headerName: "Id_Evento", width: 75 },
     {
       field: "acao",
       headerName: "Ação",
@@ -67,11 +67,6 @@ const AreaDeTrabalho = () => {
     },
   ];
 
-  const columnsTarefasTotais: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 100 },
-    { field: "localidade", headerName: "Localicade", width: 100 },
-  ];
-
   const theme = Theme;
 
   const [eventos, setEventos] = useState<any[]>([]);
@@ -79,12 +74,12 @@ const AreaDeTrabalho = () => {
   const [tarefas, setTarefas] = useState<any[]>([]);
 
   useEffect(() => {
-    getAllTarefas().then((tarefas) => {
+    getAllTarefas().then((tarefas: any) => {
       let lTarefas = tarefas.filter(
-        (tarefa) => tarefa.status === "Em andamento"
+        (tarefa: any) => tarefa.status === "Em Andamento"
       );
       setTarefas(
-        lTarefas.map((tarefa) => {
+        lTarefas.map((tarefa: any) => {
           return {
             id: tarefa.id_tarefa,
             status: tarefa.status,
@@ -123,7 +118,8 @@ const AreaDeTrabalho = () => {
         console.log("date", new Date(evento.data_hora_inicio).getDate());
         return (
           dataInicioEvento >= primeiroDiaSemana &&
-          dataInicioEvento <= ultimoDiaSemana
+          dataInicioEvento <= ultimoDiaSemana &&
+          evento.status === "Agendado"
         );
       });
 
@@ -140,9 +136,47 @@ const AreaDeTrabalho = () => {
     });
   }, []);
 
+  const [data, setData] = useState<any>({
+    labels: [],
+    datasets: [
+      {
+        label: "",
+        data: [],
+      },
+    ],
+  });
+
+  useEffect(() => {
+    countAll().then((counts) =>
+      setData({
+        labels: counts.map((count: any) => count.localidade),
+        datasets: [
+          {
+            label: "Quantidade de Eventos",
+            data: counts.map((count: any) => count.quantidade_eventos),
+            backgroundColor: counts.map(() => generateRandomColor()),
+          },
+        ],
+      })
+    );
+  }, []);
+
+  function generateRandomColor() {
+    // gera um valor aleatório entre 0 e 255 para cada componente RGB
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    // retorna a cor como uma string no formato "rgb(r, g, b)"
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+  };
+
   return (
     <Box
-      minHeight="100vh"
       display="flex"
       flex={1}
       padding="25px"
@@ -150,8 +184,8 @@ const AreaDeTrabalho = () => {
       bgcolor={theme.palette.background.default}
       gap={2}
     >
-      <Grid container spacing={2}>
-        <Box display="flex" flexDirection="column">
+      <Box display="flex" flex={3} flexDirection="column" gap={2}>
+        <Box>
           <Typography variant="h6" gutterBottom>
             Olá {nome}, boa tarde
           </Typography>
@@ -159,42 +193,55 @@ const AreaDeTrabalho = () => {
             {dataAtual.toLocaleString()}
           </Typography>
         </Box>
-        <Grid item xs={12}>
+        <Box>
           <Paper>
             <Title titulo="Eventos da Semana" />
             <DataGrid
-              sx={{ border: 0 }}
               rows={eventos}
               columns={columnsEventos}
               autoHeight
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              sx={{ border: 0 }}
             />
           </Paper>
-        </Grid>
-        <Grid item xs={12}>
+        </Box>
+        <Box>
           <Paper>
             <Title titulo="Tarefas Pendentes" />
             <DataGrid
-              sx={{ border: 0 }}
               rows={tarefas}
               columns={columnsTarefas}
               autoHeight
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              sx={{ border: 0 }}
             />
           </Paper>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
       <Box display="flex" flex={1}>
         <Paper>
-          <Title titulo="Tarefas Pendentes" />
-          <DataGrid
-            sx={{ border: 0 }}
-            rows={[]}
-            columns={columnsTarefasTotais}
-            autoHeight
-          />
+          <Title titulo="Métricas" />
+          <div style={{ width: "100%", height: "400px" }}>
+            <Pie data={data} options={options} />
+          </div>
         </Paper>
       </Box>
     </Box>
   );
 };
 
-export default AreaDeTrabalho;
+export default Inicio;
