@@ -165,7 +165,7 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({
             <TableCell>
               <TextField
                 value={descricao}
-                onChange={(e) => setDescricao(e.target.value)}
+                onChange={(e: any) => setDescricao(e.target.value)}
                 fullWidth
               />
             </TableCell>
@@ -173,7 +173,7 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({
               <Select
                 label="Status"
                 value={status}
-                onChange={(e) => setStatus(e.target.value as string)}
+                onChange={(e: any) => setStatus(e.target.value as string)}
                 disabled
               >
                 <MenuItem value="Em Andamento">A fazer</MenuItem>
@@ -185,7 +185,7 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({
                 fullWidth
                 label="localidade"
                 value={selectedLocalidade}
-                onChange={(e) => setSelectedLocalidade(e.target.value)}
+                onChange={(e: any) => setSelectedLocalidade(e.target.value)}
               >
                 {localidades.map((localidade) => {
                   return (
@@ -202,7 +202,7 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({
                 multiple
                 label="componente"
                 value={componentes}
-                onChange={(e) => setComponentes(e.target.value)}
+                onChange={(e: any) => setComponentes(e.target.value)}
               >
                 {localidades.map((localidade) => {
                   if (localidade.id_localidade === Number(selectedLocalidade)) {
@@ -223,7 +223,7 @@ const TabelaTarefas: React.FC<ITabelaTarefasProps> = ({
                 multiple
                 label="Tecnico"
                 value={selectedTecnicos}
-                onChange={(e) => setSelectedTecnicos(e.target.value)}
+                onChange={(e: any) => setSelectedTecnicos(e.target.value)}
               >
                 {tecnicos.map((tecnico) => {
                   return (
